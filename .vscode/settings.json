@@ -1,0 +1,22 @@
+{
+    "editor.rulers": [100],
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "typescript.preferences.quoteStyle": "single",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "[typescript]": {
+      "editor.formatOnSave": true
+    },
+    "[json]": {
+      "editor.formatOnSave": true
+    },
+    "[handlebars]": {
+      "editor.formatOnSave": false,
+      "editor.formatOnPaste": false,
+      "editor.suggest.insertMode": "replace"
+    },
+    "files.insertFinalNewline": true,
+    "prettier.requireConfig": true
+  }
