@@ -34,22 +34,19 @@ export class ServerSetup {
     const log = this._log.start(`Checking if ${name} is available`);
 
     let result: ExecuteCommandResult | null = null;
-    try {
-      result = await executeCommand({
-        command: `which`,
-        arguments: [name],
-        continueOnError: true
-      });
-      console.log(JSON.stringify(result));
-      log.withSuccess(result, result)
-      return true;
-    } catch (e: any) {
-      if (result?.code === 1) {
-        return false;
-      }
-      log.withFailure(`Could not run which command`, e);
+
+    result = await executeCommand({
+      command: `which`,
+      arguments: [name],
+      continueOnError: true
+    });
+
+    if (result.code === 1) {
+      log.withSuccess(`${name} was not found in system`);
       return false;
     }
+    log.withSuccess(`${name} was found in system`);
+    return true;
   }
 
   private async upgradeAndClean(): Promise<void> {
