@@ -20,8 +20,6 @@ export class ServerSetup {
 
     await this.installNano();
 
-    await this.installNano();
-
     await this.installCurl();
 
     await this.installDotnet();
@@ -71,7 +69,7 @@ export class ServerSetup {
 
     try {
 
-      const isInstalled = await this.isInstalled(`nano2`);
+      const isInstalled = await this.isInstalled(`nano`);
       if (isInstalled) {
         log.close(`Already installed`);
       } else {
@@ -87,17 +85,109 @@ export class ServerSetup {
 
     } catch (e: any) {
       log.withFailure(e);
+      throw e;
     }
 
-    return Promise.reject(`not implemented`)
   }
 
   private async installCurl(): Promise<void> {
-    return Promise.reject(`not implemented`)
+
+    const log = this._log.start(`Installing curl`);
+
+    try {
+
+      const isInstalled = await this.isInstalled(`curl`);
+      if (isInstalled) {
+        log.close(`Already installed`);
+      } else {
+
+        await executeCommand({
+          command: `apt-get`,
+          arguments: [`install`, `curl`]
+        });
+
+        log.withSuccess();
+
+      }
+
+    } catch (e: any) {
+      log.withFailure(e);
+      throw e;
+    }
+
+
   }
 
   private async installDotnet(): Promise<void> {
-    return Promise.reject(`not implemented`)
+
+
+    const log = this._log.start(`Installing dotnet 6`);
+
+    try {
+
+      const isInstalled = await this.isInstalled(`dotnet`);
+      if (isInstalled) {
+        log.close(`Already installed`);
+
+      } else {
+
+        await executeCommand({
+          command: `wget`, arguments: [
+            `https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb`,
+            `-O`, `packages-microsoft-prod.deb`]
+        });
+
+        await executeCommand({
+          command: `dpkg`, arguments: [
+            `-i`, `packages-microsoft-prod.deb`]
+        });
+
+        await executeCommand({
+          command: `rm`, arguments: [
+            `packages-microsoft-prod.deb`]
+        });
+
+
+        await executeCommand({
+          command: `apt-get`, arguments: [
+            `update`]
+        });
+
+        await executeCommand({
+          command: `apt-get`, arguments: [
+            `install`, `-y`, `apt-transport-https`]
+        });
+
+        await executeCommand({
+          command: `apt-get`, arguments: [
+            `update`]
+        });
+
+        await executeCommand({
+          command: `apt-get`, arguments: [
+            `install`, `-y`, `dotnet-sdk-6.0`]
+        });
+
+        // wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+        // sudo dpkg -i packages-microsoft-prod.deb
+        // rm packages-microsoft-prod.deb
+
+        // sudo apt-get update
+        // sudo apt-get install -y apt-transport-https
+        // sudo apt-get update
+        // sudo apt-get install -y dotnet-sdk-6.0
+
+        log.withSuccess();
+
+      }
+
+    } catch (e: any) {
+      log.withFailure(e);
+      throw e;
+    }
+
+
+
   }
 
   private async installCertbot(): Promise<void> {
