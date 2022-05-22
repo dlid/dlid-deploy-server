@@ -1,5 +1,66 @@
+import { executeCommand } from './execute-command';
+import { Logger } from './logger';
+
 export class ServerSetup {
 
+  private _log: Logger;
+
+  constructor() {
+    this._log = new Logger();
+  }
+
+  public async run(): Promise<void> {
+
+    // this._log.debug(`Debug log`);  
+    // this._log.info(`Info log`);
+    // this._log.warn(`warn log`);
+    // this._log.error(`error log`);
+
+    await this.upgradeAndClean();
+
+    await this.installNano();
+
+    await this.installCurl();
+
+    await this.installDotnet();
+
+    await this.installCertbot();
+
+  }
+
+  private async upgradeAndClean(): Promise<void> {
+
+    try {
+      const result = await executeCommand({
+        command: `apt-get`,
+        arguments: [`update`, `-y`]
+      });
+    } catch (e: any) {
+      this._log.error(`Error running upgrade and clean`, e);
+    }
+
+
+    return Promise.reject(`not implemented`)
+
+  }
+
+  private async installNano(): Promise<void> {
+    return Promise.reject(`not implemented`)
+  }
+
+  private async installCurl(): Promise<void> {
+    return Promise.reject(`not implemented`)
+  }
+
+  private async installDotnet(): Promise<void> {
+    return Promise.reject(`not implemented`)
+  }
+
+  private async installCertbot(): Promise<void> {
+    return Promise.reject(`not implemented`)
+  }
+
+  // firewall?
 
 
 }
@@ -11,6 +72,14 @@ server name: deploytest
 user: david
 pwd: snorkel
 
+when testing - we need npm and nodejs to build
+git clone https://github.com/dlid/dlid-deploy-server
+apt install -y npm
+curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+apt-get install -y nodejs
+
+node --version
+npm --version
 
 # upgrade and clean
 sudo apt-get update
