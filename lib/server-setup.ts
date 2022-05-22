@@ -37,7 +37,8 @@ export class ServerSetup {
     try {
       result = await executeCommand({
         command: `which`,
-        arguments: [name]
+        arguments: [name],
+        continueOnError: true
       });
       console.log(JSON.stringify(result));
       log.withSuccess(result, result)
