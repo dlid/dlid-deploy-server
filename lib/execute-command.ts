@@ -22,18 +22,29 @@ export interface ExecuteCommandResult {
   command: string;
 }
 
-export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCommandResult> {
+export async function executeCommand(args: ExecuteCommandArg | string[]): Promise<ExecuteCommandResult> {
+
+  let options: ExecuteCommandArg;
+
+  if (Array.isArray(args)) {
+    options = {
+      command: args[0],
+      arguments: args.slice(1)
+    }
+  } else {
+    options = args;
+  }
 
   const log = new Logger();
 
   return new Promise((resolve, reject) => {
 
-    const readableCommand = [args.command, ...args.arguments || []].join(` `);
+    const readableCommand = [options.command, ...options.arguments || []].join(` `);
 
     log.debug(`exec ${readableCommand}`);
 
-    const child = spawn(args.command, args.arguments, {
-      shell: true, cwd: args.workingDirectory
+    const child = spawn(options.command, options.arguments, {
+      shell: true, cwd: options.workingDirectory
     });
 
 
@@ -57,7 +68,7 @@ export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCo
 
     child.on(`close`, function (code: number) {
 
-      if (args.continueOnError !== true && code !== 0) {
+      if (options.continueOnError !== true && code !== 0) {
 
         log.warn(`Process ${child.pid} Exited with code ${code}`);
 

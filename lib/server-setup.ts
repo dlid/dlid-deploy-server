@@ -24,6 +24,8 @@ export class ServerSetup {
 
     await this.installDotnet();
 
+    await this.installApache2();
+
     await this.installCertbot();
 
   }
@@ -168,17 +170,7 @@ export class ServerSetup {
             `install`, `-y`, `dotnet-sdk-6.0`]
         });
 
-        // wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-        // sudo dpkg -i packages-microsoft-prod.deb
-        // rm packages-microsoft-prod.deb
-
-        // sudo apt-get update
-        // sudo apt-get install -y apt-transport-https
-        // sudo apt-get update
-        // sudo apt-get install -y dotnet-sdk-6.0
-
         log.withSuccess();
-
       }
 
     } catch (e: any) {
@@ -186,7 +178,41 @@ export class ServerSetup {
       throw e;
     }
 
+  }
 
+  private async installApache2(): Promise<void> {
+
+
+    const log = this._log.start(`Installing apache2`);
+
+    try {
+
+      const isInstalled = await this.isInstalled(`apache2`);
+      if (isInstalled) {
+        log.close(`Already installed`);
+      } else {
+        await executeCommand({
+          command: `apt-get`, arguments: [
+            `install`, `-y`,
+            `apache2`]
+        });
+
+
+      }
+
+      await executeCommand([`a2enmod`, `ssl`]);
+      await executeCommand([`a2enmod`, `rewrite`]);
+      await executeCommand([`a2enmod`, `proxy`]);
+      await executeCommand([`a2enmod`, `proxy_http`]);
+      await executeCommand([`a2enmod`, `request`]);
+      await executeCommand([`a2enmod`, `headers`]);
+      await executeCommand([`service`, `apache2`, `restart`]);
+
+      log.withSuccess();
+    } catch (e: any) {
+      log.withFailure(e);
+      throw e;
+    }
 
   }
 
