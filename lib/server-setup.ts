@@ -39,7 +39,7 @@ export class ServerSetup {
         arguments: [name]
       });
 
-      log.withSuccess(result)
+      log.withSuccess(result, result)
       return true;
     } catch (e: any) {
       log.withFailure(`Could not run which command`, e);

@@ -41,7 +41,7 @@ export class Logger {
     this.info(`{color:cyan}${name}`);
     RuntimeContext.current.logIndent++;
     return new ChildLogger({
-      indent: this._indent + 1,
+      indent: RuntimeContext.current.logIndent,
       name
     });
   }
