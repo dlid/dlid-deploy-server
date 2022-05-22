@@ -35,6 +35,10 @@ export class ServerSetup {
         command: `apt-get`,
         arguments: [`update`, `-y`]
       });
+
+
+      this._log.info(`That went well`, result)
+
     } catch (e: any) {
       this._log.error(`Error running upgrade and clean`, e);
     }
