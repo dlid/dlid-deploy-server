@@ -221,18 +221,16 @@ export class ServerSetup {
 
     try {
 
-      const isInstalled = await this.isInstalled(`apache2`);
+      const isInstalled = await this.isInstalled(`certbot`);
       if (isInstalled) {
         log.close(`Already installed`);
       } else {
-        await executeCommand({
-          command: `add-apt-repository`, arguments: [
-            `ppa:certbot/certbot`]
-        });
-
+        await executeCommand([
+          `add-apt-repository`,
+          `ppa:certbot/certbot`
+        ]);
+        await executeCommand([`apt`, `install`, `python-certbot-apache`]);
       }
-
-      await executeCommand([`apt`, `install`, `python-certbot-apache`]);
 
       log.withSuccess();
     } catch (e: any) {
