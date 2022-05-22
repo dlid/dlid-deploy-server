@@ -1,4 +1,4 @@
-import { ExecuteCommandResult } from './../dist/lib/executeCommand.d';
+import { ExecuteCommandResult } from './../dist/lib/executeCommand';
 import { executeCommand } from './execute-command';
 import { Logger } from './logger';
 
