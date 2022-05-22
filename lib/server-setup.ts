@@ -30,27 +30,56 @@ export class ServerSetup {
 
   }
 
+  private async isInstalled(name: string): Promise<boolean> {
+    const log = this._log.start(`Checking if ${name} is available`);
+
+    try {
+      const result = await executeCommand({
+        command: `which`,
+        arguments: [name]
+      });
+
+      log.withSuccess(result)
+      return true;
+    } catch (e: any) {
+      log.withFailure(`Could not run which command`, e);
+      return false;
+    }
+  }
+
   private async upgradeAndClean(): Promise<void> {
 
     const log = this._log.start(`Running apt-get update`);
 
     try {
-      const result = await executeCommand({
+      await executeCommand({
         command: `apt-get`,
         arguments: [`update`, `-y`]
       });
-
-      log.withSuccess(`That went well`, result)
-
+      log.withSuccess()
     } catch (e: any) {
       log.withFailure(`Could not run apt-get update`, e);
     }
 
-    return Promise.reject(`not implemented`)
-
   }
 
   private async installNano(): Promise<void> {
+
+    const log = this._log.start(`Installing nano`);
+
+    try {
+
+      const isInstalled = this.isInstalled(`nano`);
+
+      // await executeCommand({
+      //   command: `apt-get`,
+      //   arguments: [`update`, `-y`]
+      // });
+      log.withSuccess()
+    } catch (e: any) {
+      log.withFailure(e);
+    }
+
     return Promise.reject(`not implemented`)
   }
 
