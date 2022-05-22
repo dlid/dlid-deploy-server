@@ -1,5 +1,4 @@
-import { ExecuteCommandResult } from './../dist/lib/executeCommand';
-import { executeCommand } from './execute-command';
+import { executeCommand, ExecuteCommandResult } from './execute-command';
 import { Logger } from './logger';
 
 export class ServerSetup {
