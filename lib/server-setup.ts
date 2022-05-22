@@ -20,6 +20,8 @@ export class ServerSetup {
 
     await this.installNano();
 
+    await this.installNano();
+
     await this.installCurl();
 
     await this.installDotnet();
@@ -30,19 +32,19 @@ export class ServerSetup {
 
   private async upgradeAndClean(): Promise<void> {
 
+    const log = this._log.start(`Running apt-get update`);
+
     try {
       const result = await executeCommand({
         command: `apt-get`,
         arguments: [`update`, `-y`]
       });
 
-
-      this._log.info(`That went well`, result)
+      log.withSuccess(`That went well`, result)
 
     } catch (e: any) {
-      this._log.error(`Error running upgrade and clean`, e);
+      log.withFailure(`Could not run apt-get update`, e);
     }
-
 
     return Promise.reject(`not implemented`)
 

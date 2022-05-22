@@ -25,9 +25,11 @@ export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCo
 
   const log = new Logger();
 
-  log.info(`mgm`);
-
   return new Promise((resolve, reject) => {
+
+    const readableCommand = [args.command, ...args.arguments || []].join(` `);
+
+    log.debug(`exec ${readableCommand}`);
 
     const child = spawn(args.command, args.arguments, {
       shell: true, cwd: args.workingDirectory
@@ -35,11 +37,12 @@ export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCo
 
 
 
+
     let content = ``;
     let processError = ``;
-    const readableCommand = [args.command, ...args.arguments || []].join(` `);
 
-    log.debug(`[Process ${child.pid}] Started - ${readableCommand}`);
+
+    log.debug(`Process ${child.pid} Started`);
 
     child.stdout.on(`data`, function (data) {
       content += data.toString();
@@ -54,7 +57,7 @@ export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCo
     child.on(`close`, function (code) {
       if (code !== 0) {
 
-        log.warn(`[Process ${child.pid}] Exited with code ${code}`);
+        log.warn(`Process ${child.pid} Exited with code ${code}`);
 
         // console.log(`\x1b[31m===============================`);
         // console.log(`[Process ${child.pid}] ERROR`);
@@ -70,8 +73,7 @@ export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCo
         return;
       }
 
-      log.debug(`[Process ${child.pid}] Exited with code ${code}`);
-      log.debug(content);
+      log.debug(`Process ${child.pid} Exited with code ${code}`);
 
       resolve({
         success: code === 0,

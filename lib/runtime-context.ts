@@ -5,6 +5,7 @@ class RuntimeContext {
   private static _instance?: RuntimeContext;
 
   public logSetting: LogSetting = LogSetting.Information;
+  public logIndent = 0;
 
   /**
    * Delete the current instance to make sure we get a new one
