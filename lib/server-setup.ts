@@ -197,7 +197,6 @@ export class ServerSetup {
             `apache2`]
         });
 
-
       }
 
       await executeCommand([`a2enmod`, `ssl`]);
@@ -217,7 +216,30 @@ export class ServerSetup {
   }
 
   private async installCertbot(): Promise<void> {
-    return Promise.reject(`not implemented`)
+
+    const log = this._log.start(`Installing certbot`);
+
+    try {
+
+      const isInstalled = await this.isInstalled(`apache2`);
+      if (isInstalled) {
+        log.close(`Already installed`);
+      } else {
+        await executeCommand({
+          command: `add-apt-repository`, arguments: [
+            `ppa:certbot/certbot`]
+        });
+
+      }
+
+      await executeCommand([`apt`, `install`, `python-certbot-apache`]);
+
+      log.withSuccess();
+    } catch (e: any) {
+      log.withFailure(e);
+      throw e;
+    }
+
   }
 
   // firewall?
