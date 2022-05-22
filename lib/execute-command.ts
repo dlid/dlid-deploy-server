@@ -11,6 +11,7 @@ export interface ExecuteCommandArg {
   command: string;
   arguments?: string[];
   workingDirectory?: string;
+  continueOnError?: boolean;
 }
 
 export interface ExecuteCommandResult {
@@ -54,8 +55,9 @@ export async function executeCommand(args: ExecuteCommandArg): Promise<ExecuteCo
       processError = d.toString();
     })
 
-    child.on(`close`, function (code) {
-      if (code !== 0) {
+    child.on(`close`, function (code: number) {
+
+      if (args.continueOnError !== true && code !== 0) {
 
         log.warn(`Process ${child.pid} Exited with code ${code}`);
 
