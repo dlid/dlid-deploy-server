@@ -38,7 +38,7 @@ export class ServerSetup {
         command: `which`,
         arguments: [name]
       });
-
+      console.log(JSON.stringify(result));
       log.withSuccess(result, result)
       return true;
     } catch (e: any) {
