@@ -42,10 +42,10 @@ export class ServerSetup {
     });
 
     if (result.code === 1) {
-      log.withSuccess(`${name} was not found in system`);
+      log.withSuccess(`${name} Not found`);
       return false;
     }
-    log.withSuccess(`${name} was found in system`);
+    log.withSuccess(`${name} Found`);
     return true;
   }
 
@@ -73,16 +73,18 @@ export class ServerSetup {
 
       const isInstalled = await this.isInstalled(`nano2`);
       if (isInstalled) {
-        log.info(`Already installed`);
+        log.close(`Already installed`);
       } else {
-        log.info(`Installing...`);
+
+        await executeCommand({
+          command: `apt-get`,
+          arguments: [`install`, `nano`]
+        });
+
+        log.withSuccess();
+
       }
 
-      // await executeCommand({
-      //   command: `apt-get`,
-      //   arguments: [`update`, `-y`]
-      // });
-      log.withSuccess()
     } catch (e: any) {
       log.withFailure(e);
     }
