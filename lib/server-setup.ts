@@ -1,3 +1,4 @@
+import { ExecuteCommandResult } from './../dist/lib/executeCommand.d';
 import { executeCommand } from './execute-command';
 import { Logger } from './logger';
 
@@ -33,8 +34,9 @@ export class ServerSetup {
   private async isInstalled(name: string): Promise<boolean> {
     const log = this._log.start(`Checking if ${name} is available`);
 
+    let result: ExecuteCommandResult | null = null;
     try {
-      const result = await executeCommand({
+      result = await executeCommand({
         command: `which`,
         arguments: [name]
       });
@@ -42,6 +44,9 @@ export class ServerSetup {
       log.withSuccess(result, result)
       return true;
     } catch (e: any) {
+      if (result?.code === 1) {
+        return false;
+      }
       log.withFailure(`Could not run which command`, e);
       return false;
     }
@@ -70,6 +75,11 @@ export class ServerSetup {
     try {
 
       const isInstalled = await this.isInstalled(`nano2`);
+      if (isInstalled) {
+        log.info(`Already installed`);
+      } else {
+        log.info(`Installing...`);
+      }
 
       // await executeCommand({
       //   command: `apt-get`,
