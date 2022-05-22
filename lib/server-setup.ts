@@ -69,7 +69,7 @@ export class ServerSetup {
 
     try {
 
-      const isInstalled = await this.isInstalled(`nano`);
+      const isInstalled = await this.isInstalled(`nano2`);
 
       // await executeCommand({
       //   command: `apt-get`,
