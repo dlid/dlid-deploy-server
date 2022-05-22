@@ -144,7 +144,7 @@ export class ChildLogger extends Logger {
 
   public withSuccess(...args: (object | string)[]): void {
     this.writeLog({
-      args: [`{color:cyan}${this._name}`, `{color:green}SUCCEEDED`, ...args],
+      args: [`{color:green}OK`, `({color:cyan}${this._name})`, ...args],
       level: `info`
     });
     RuntimeContext.current.logIndent--;
