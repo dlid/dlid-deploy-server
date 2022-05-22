@@ -229,7 +229,7 @@ export class ServerSetup {
           `add-apt-repository`,
           `ppa:certbot/certbot`
         ]);
-        await executeCommand([`apt`, `install`, `python-certbot-apache`]);
+        await executeCommand([`apt`, `install`, `-y`, `certbot`, `python3-certbot-apache`]);
       }
 
       log.withSuccess();
